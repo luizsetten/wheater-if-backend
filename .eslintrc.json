@@ -24,5 +24,24 @@
             "typescript": {}
         }
     },
-    "rules": {}
+    "rules": {
+        "import/prefer-default-export": "off",
+        "import/extensions": [
+            "error",
+            "ignorePackages",
+            {
+                "js": "never",
+                "jsx": "never",
+                "ts": "never",
+                "tsx": "never"
+            }
+        ],
+        "indent": [
+            "error",
+            2,
+            {
+                "MemberExpression": 1
+            }
+        ],
+    }
 }
