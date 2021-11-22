@@ -12,6 +12,6 @@ app.get('/', (request: Request, response: Response) => {
   response.send(200);
 });
 
-app.post('/', recordController.create);
+app.post('/records', recordController.create);
 
 app.listen(3333, () => console.log('Server is listening on http://localhost:3333/'));

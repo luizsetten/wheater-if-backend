@@ -8,37 +8,37 @@ export class CreateRecords1637506244146 implements MigrationInterface {
 			columns: [
 				{
 					name: "id",
-					type: "string",
+					type: "uuid",
 					isPrimary: true
 				},
 				{
 					name: "humidity",
-					type: "number",
+					type: "float",
 					isNullable: true,
 				},
 				{
 					name: "pressure",
-					type: "number",
+					type: "float",
 					isNullable: true,
 				},
 				{
 					name: "solar_incidence",
-					type: "number",
+					type: "float",
 					isNullable: true,
 				},
 				{
 					name: "wind_direction",
-					type: "string",
+					type: "varchar",
 					isNullable: true,
 				},
 				{
 					name: "wind_speed",
-					type: "number",
+					type: "float",
 					isNullable: true,
 				},
 				{
 					name: "station_id",
-					type: "string",
+					type: "varchar",
 					isNullable: true,
 				},
 				{
