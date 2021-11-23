@@ -27,6 +27,11 @@ export class CreateRecords1637506244146 implements MigrationInterface {
 					isNullable: true,
 				},
 				{
+					name: "temperature",
+					type: "float",
+					isNullable: true,
+				},
+				{
 					name: "wind_direction",
 					type: "varchar",
 					isNullable: true,

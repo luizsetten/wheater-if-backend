@@ -33,8 +33,9 @@ export class RecordController {
       const saved = await conn.manager.save(record);
 
       response.send(saved);
-    } catch {
-      response.status(500).send();
+    } catch (e) {
+      console.log(e);
+      response.sendStatus(500);
     }
   }
 

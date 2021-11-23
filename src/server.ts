@@ -1,7 +1,7 @@
 import { RecordController } from './controllers/recordController';
 import express, { Request, Response } from 'express';
 import "reflect-metadata";
-import './config/datasabe';
+// import './config/datasabe';
 
 const app = express();
 app.use(express.json());

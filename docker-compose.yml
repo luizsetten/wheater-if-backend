@@ -3,7 +3,7 @@ version: "3.9"
 services:
   database:
     image: postgres
-    container_name: database_ignite
+    container_name: wheather_database
     restart: always
     ports:
       - 5432:5432
