@@ -9,22 +9,25 @@ class Record {
   id?: string;
 
   @Column()
-  temperature: string;
+  temperature: number;
 
   @Column()
-  humidity: string;
+  humidity: number;
 
   @Column()
-  pressure: string;
+  pressure: number;
 
   @Column()
-  solar_incidence: string;
+  precipitation: number;
 
   @Column()
-  wind_direction: string;
+  solar_incidence: number;
 
   @Column()
-  wind_speed: string;
+  wind_direction: number;
+
+  @Column()
+  wind_speed: number;
 
   @Column()
   station_id: string;

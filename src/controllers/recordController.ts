@@ -1,6 +1,6 @@
 import { Record } from "../entities/Record";
 import { Request, Response } from "express";
-import { createConnection } from "typeorm";
+import { getConnection } from "typeorm";
 
 export class RecordController {
   public async create(request: Request, response: Response): Promise<void> {
@@ -28,7 +28,7 @@ export class RecordController {
         station_id,
       });
 
-      const conn = await createConnection();
+      const conn = await getConnection();
 
       const saved = await conn.manager.save(record);
 
@@ -39,15 +39,49 @@ export class RecordController {
     }
   }
 
-  list() {
+  async list(request: Request, response: Response): Promise<void> {
+    const { station_id } = request.query;
+    const conn = await getConnection();
 
+    if (station_id) {
+      const records = await conn
+        .getRepository(Record)
+        .createQueryBuilder("record")
+        .where("record.station_id = :id", { id: station_id })
+        .getMany();
+
+      response.send(records);
+    } else {
+      const records = await conn
+        .getRepository(Record)
+        .createQueryBuilder("record")
+        .getMany();
+
+      response.send(records);
+    }
   }
 
-  findById() {
+  async findLast(request: Request, response: Response): Promise<void> {
+    const { station_id } = request.query;
+    const conn = await getConnection();
 
-  }
+    if (station_id) {
+      const record = await conn
+        .getRepository(Record)
+        .createQueryBuilder("record")
+        .where("record.station_id = :id", { id: station_id })
+        .orderBy("created_at", "DESC")
+        .getOne();
 
-  findLast() {
+      response.send(record);
+    } else {
+      const record = await conn
+        .getRepository(Record)
+        .createQueryBuilder("record")
+        .orderBy("created_at", "DESC")
+        .getOne();
 
+      response.send(record);
+    }
   }
 }

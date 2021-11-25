@@ -22,6 +22,11 @@ export class CreateRecords1637506244146 implements MigrationInterface {
 					isNullable: true,
 				},
 				{
+					name: "precipitation",
+					type: "float",
+					isNullable: true,
+				},
+				{
 					name: "solar_incidence",
 					type: "float",
 					isNullable: true,
