@@ -15,6 +15,7 @@ export class LogsController {
       .createQueryBuilder("records")
       .getMany();
 
+
     let stations: Array<string> = [];
 
     records.forEach(record => {
@@ -80,4 +81,38 @@ export class LogsController {
 
     response.sendStatus(201);
   }
+
+  async list(request: Request, response: Response) {
+    const { station_id, reference_date_min, reference_date_max } = request.params;
+
+    const conn = getConnection();
+
+    const log = conn.getRepository(Log);
+
+    const logs = await log.createQueryBuilder("log")
+      .where('log.station_id = :station_id', { station_id }) // No momento só há uma estação
+      .andWhere("log.reference_date >= :reference_date_min", { reference_date_min })
+      .andWhere('log.reference_date <= :reference_date_max', { reference_date_max })
+      .orderBy("log.reference_date", "ASC")
+      .getMany();
+
+    response.send(logs);
+  }
+
+  // async downloadCSV(request: Request, response: Response) {
+  //   const { station_id, reference_date_min, reference_date_max } = request.params;
+
+  //   const conn = getConnection();
+
+  //   const log = conn.getRepository(Log);
+
+  //   const logs = await log.createQueryBuilder("log")
+  //     .where('log.station_id = :station_id', { station_id }) // No momento só há uma estação
+  //     .andWhere("log.reference_date >= :reference_date_min", { reference_date_min })
+  //     .andWhere('log.reference_date <= :reference_date_max', { reference_date_max })
+  //     .orderBy("log.reference_date", "ASC")
+  //     .getMany();
+
+
+  // }
 }
