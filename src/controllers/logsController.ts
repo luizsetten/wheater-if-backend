@@ -4,7 +4,7 @@ import { getConnection } from "typeorm";
 import { Record } from "../entities/Record";
 import { Log } from "../entities/Log";
 import { groupByTime } from "../utils/time";
-
+import { parseAsync } from "json2csv";
 
 export class LogsController {
   async update(request: Request, response: Response) {
@@ -99,20 +99,25 @@ export class LogsController {
     response.send(logs);
   }
 
-  // async downloadCSV(request: Request, response: Response) {
-  //   const { station_id, reference_date_min, reference_date_max } = request.params;
+  async downloadCSV(request: Request, response: Response) {
+    const { station_id, reference_date_min, reference_date_max } = request.params;
 
-  //   const conn = getConnection();
+    const conn = getConnection();
 
-  //   const log = conn.getRepository(Log);
+    const log = conn.getRepository(Log);
 
-  //   const logs = await log.createQueryBuilder("log")
-  //     .where('log.station_id = :station_id', { station_id }) // No momento só há uma estação
-  //     .andWhere("log.reference_date >= :reference_date_min", { reference_date_min })
-  //     .andWhere('log.reference_date <= :reference_date_max', { reference_date_max })
-  //     .orderBy("log.reference_date", "ASC")
-  //     .getMany();
+    const logs = await log.createQueryBuilder("log")
+      .where('log.station_id = :station_id', { station_id }) // No momento só há uma estação
+      .andWhere("log.reference_date >= :reference_date_min", { reference_date_min })
+      .andWhere('log.reference_date <= :reference_date_max', { reference_date_max })
+      .orderBy("log.reference_date", "ASC")
+      .getMany();
 
+    response.setHeader("Content-Type", "text/csv");
+    response.setHeader("Content-Disposition", "attachment; filename=logs.csv");
 
-  // }
+    const file = await parseAsync(logs);
+
+    response.send(file);
+  }
 }

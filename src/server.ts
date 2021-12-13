@@ -23,5 +23,6 @@ app.post('/records', recordController.create);
 
 app.get('/updateLogs', logsController.update);
 app.get('/logs/:station_id/:reference_date_min/:reference_date_max', logsController.list);
+app.get('/logs/:station_id/:reference_date_min/:reference_date_max/download', logsController.downloadCSV);
 
 app.listen(3333, () => console.log('Server is listening on http://localhost:3333/'));
