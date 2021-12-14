@@ -3,9 +3,11 @@ import express, { Request, Response } from 'express';
 import "reflect-metadata";
 import './config/datasabe';
 import { LogsController } from './controllers/logsController';
+import cors from "cors";
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 const recordController = new RecordController()
 const logsController = new LogsController()
