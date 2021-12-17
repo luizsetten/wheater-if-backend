@@ -15,15 +15,30 @@ export class RecordController {
         solar_incidence,
         wind_direction,
         wind_speed,
+        precipitation,
         station_id,
       } } = request;
+
+      const windDir: Array<number> = String(wind_direction).split(',').map(item => Number(item));
+      console.log("Salvou!", record.id, wind_direction);
+
+      function mode(arr: Array<number>) {
+        return arr.sort((a, b) =>
+          arr.filter(v => v === a).length
+          - arr.filter(v => v === b).length
+        ).pop();
+      }
+
+      const windDirectionResolved = windDir ? mode(windDir) : undefined;
+
 
       Object.assign(record, {
         temperature,
         humidity,
         pressure,
+        precipitation,
         solar_incidence,
-        wind_direction,
+        wind_direction: windDirectionResolved,
         wind_speed,
         station_id,
       });
