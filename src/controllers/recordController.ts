@@ -20,7 +20,7 @@ export class RecordController {
       } } = request;
 
       const windDir: Array<number> = String(wind_direction).split(',').map(item => Number(item));
-      console.log("Salvou!", record.id, wind_direction);
+      console.log("Salvou!", record.id, request.body);
 
       function mode(arr: Array<number>) {
         return arr.sort((a, b) =>
