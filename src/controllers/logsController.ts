@@ -91,12 +91,12 @@ export class LogsController {
 
     const logs = await log.createQueryBuilder("log")
       .where('log.station_id = :station_id', { station_id }) // No momento só há uma estação
-      .andWhere("log.reference_date >= :reference_date_min", { reference_date_min })
-      .andWhere('log.reference_date <= :reference_date_max', { reference_date_max })
+      .andWhere("log.reference_date >= :reference_date_min", { reference_date_min: new Date(reference_date_min) })
+      .andWhere('log.reference_date <= :reference_date_max', { reference_date_max: new Date(reference_date_max) })
       .orderBy("log.reference_date", "ASC")
       .getMany();
 
-    response.send(logs);
+    response.send({ logs });
   }
 
   async downloadCSV(request: Request, response: Response) {
@@ -108,8 +108,8 @@ export class LogsController {
 
     const logs = await log.createQueryBuilder("log")
       .where('log.station_id = :station_id', { station_id }) // No momento só há uma estação
-      .andWhere("log.reference_date >= :reference_date_min", { reference_date_min })
-      .andWhere('log.reference_date <= :reference_date_max', { reference_date_max })
+      .andWhere("log.reference_date >= :reference_date_min", { reference_date_min: new Date(reference_date_min) })
+      .andWhere('log.reference_date <= :reference_date_max', { reference_date_max: new Date(reference_date_max) })
       .orderBy("log.reference_date", "ASC")
       .getMany();
 

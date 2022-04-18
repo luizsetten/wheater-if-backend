@@ -19,6 +19,7 @@ const usersController = new UsersController();
 const stationController = new StationController();
 
 app.get('/', (request: Request, response: Response) => {
+  console.log("Refletiu aqui")
   response.sendStatus(200);
 });
 

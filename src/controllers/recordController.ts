@@ -29,7 +29,7 @@ export class RecordController {
         ).pop();
       }
 
-      const windDirectionResolved = windDir ? mode(windDir) : undefined;
+      const windDirectionResolved = windDir ? mode(windDir) : 0;
 
 
       Object.assign(record, {
@@ -77,7 +77,7 @@ export class RecordController {
   }
 
   async findLast(request: Request, response: Response): Promise<void> {
-    const { station_id } = request.query;
+    const { station_id } = request.params;
     const conn = await getConnection();
 
     if (station_id) {
