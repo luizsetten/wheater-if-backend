@@ -6,6 +6,7 @@ import { Log } from "../entities/Log";
 import { groupByTime } from "../utils/time";
 import { parseAsync } from "json2csv";
 import { onlyUnique } from "../utils/array";
+import { format, parse } from "date-fns";
 
 export class LogsController {
   async update(_request: Request, response: Response) {
@@ -125,7 +126,53 @@ export class LogsController {
     response.setHeader("Content-Type", "text/csv");
     response.setHeader("Content-Disposition", "attachment; filename=logs.csv");
 
-    const file = await parseAsync(logs);
+    const logsFormatted = logs.map(log => {
+      return {
+        id: log.id,
+        temperature_avg: log.temperature_avg.toFixed(2),
+        temperature_min: log.temperature_min.toFixed(2),
+        temperature_max: log.temperature_max.toFixed(2),
+        humidity_avg: log.humidity_avg.toFixed(2),
+        humidity_min: log.humidity_min.toFixed(2),
+        humidity_max: log.humidity_max.toFixed(2),
+        pressure_avg: log.pressure_avg.toFixed(2),
+        precipitation_avg: log.precipitation_avg.toFixed(2),
+        precipitation_min: log.precipitation_min.toFixed(2),
+        precipitation_max: log.precipitation_max.toFixed(2),
+        solar_incidence_avg: log.solar_incidence_avg.toFixed(2),
+        solar_incidence_min: log.solar_incidence_min.toFixed(2),
+        solar_incidence_max: log.solar_incidence_max.toFixed(2),
+        wind_direction_avg: log.wind_direction_avg,
+        wind_speed_avg: log.wind_speed_avg.toFixed(2),
+        date: format(log.reference_date, 'dd/MM/yyyy'),
+        hours: format(log.reference_date, 'HH:mm')
+      }
+    })
+
+    const file = await parseAsync(logsFormatted, {
+      fields: [
+        { value: "date", label: 'Data' },
+        { value: "hours", label: 'Hora' },
+        { value: "id", label: 'ID' },
+        { value: "temperature_min", label: "Temperatura Mínima (°C)" },
+        { value: "temperature_avg", label: "Temperatura Média (°C)" },
+        { value: "temperature_max", label: "Temperatura Máxima (°C)" },
+        { value: "pressure_avg", label: "Pressão atmosférica (hPa)" },
+        { value: "humidity_min", label: "Humidade Mínima (%)" },
+        { value: "humidity_avg", label: "Humidade Média (%)" },
+        { value: "humidity_max", label: "Humidade Máxima (%)" },
+        { value: "precipitation_min", label: "Precipitação Mínima (mm)" },
+        { value: "precipitation_avg", label: "Precipitação Média (mm)" },
+        { value: "precipitation_max", label: "Precipitação Máxima (mm)" },
+        { value: "solar_incidence_min", label: "Incidência Solar Mínima (mW/m²)" },
+        { value: "solar_incidence_avg", label: "Incidência Solar Média (mW/m²)" },
+        { value: "solar_incidence_max", label: "Incidência Solar Máxima (mW/m²)" },
+        { value: "wind_direction_avg", label: "Direção do vento (°N)" },
+        { value: "wind_speed_avg", label: "Velocidade do Vento (m/s)" },
+      ],
+
+      delimiter: ';'
+    });
 
     response.send(file);
   }
