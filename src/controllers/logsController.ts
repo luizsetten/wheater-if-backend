@@ -5,25 +5,10 @@ import { Record } from "../entities/Record";
 import { Log } from "../entities/Log";
 import { groupByTime } from "../utils/time";
 import { parseAsync } from "json2csv";
+import { onlyUnique } from "../utils/array";
 
 export class LogsController {
-  async update(request: Request, response: Response) {
-    const conn = getConnection();
-
-    const records = await conn
-      .getRepository(Record)
-      .createQueryBuilder("records")
-      .getMany();
-
-
-    let stations: Array<string> = [];
-
-    records.forEach(record => {
-      if (!!record.station_id && !stations.includes(record.station_id)) {
-        stations.push(record.station_id);
-      }
-    });
-
+  async update(_request: Request, response: Response) {
     const createLog = (records: Array<Record>): Log => {
       const log = new Log();
 
@@ -61,8 +46,28 @@ export class LogsController {
       return log;
     }
 
-    stations.forEach(station => {
-      const stationRecords = records.filter(record => record.station_id === station);
+    const conn = getConnection();
+
+    const records = await conn
+      .getRepository(Record)
+      .createQueryBuilder("record")
+      .orderBy("record.created_at", 'ASC')
+      .getMany();
+
+
+    const stations = records.map(rec => rec.station_id).filter(onlyUnique);
+
+    const recordsToRestore = stations.map(station => {
+      const filtered = records.filter(rec => rec.station_id === station);
+
+      const record = new Record();
+
+      Object.assign(record, { ...filtered[filtered.length - 1], in_log: true })
+      return record;
+    });
+
+    stations.forEach(async (station) => {
+      const stationRecords = records.filter(record => record.station_id === station && record.in_log === false);
       const grouped: Object = groupByTime(stationRecords);
 
       const values: Record[][] = Object.values(grouped)
@@ -78,6 +83,10 @@ export class LogsController {
       .delete()
       .from(Record)
       .execute();
+
+    recordsToRestore.forEach(record => {
+      conn.getRepository(Record).save(record);
+    })
 
     response.sendStatus(201);
   }

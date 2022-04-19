@@ -38,7 +38,7 @@ export class CreateRecords1637506244146 implements MigrationInterface {
 				},
 				{
 					name: "wind_direction",
-					type: "varchar",
+					type: "float",
 					isNullable: true,
 				},
 				{
@@ -50,6 +50,11 @@ export class CreateRecords1637506244146 implements MigrationInterface {
 					name: "station_id",
 					type: "varchar",
 					isNullable: true,
+				},
+				{
+					name: "in_log",
+					type: "boolean",
+					default: false,
 				},
 				{
 					name: "created_at",

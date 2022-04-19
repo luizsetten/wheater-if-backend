@@ -35,6 +35,9 @@ class Record {
   @CreateDateColumn()
   created_at: Date;
 
+  @Column()
+  in_log: boolean;
+
   constructor() {
     if (!this.id) {
       this.id = uuidV4();
