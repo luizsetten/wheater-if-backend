@@ -14,6 +14,9 @@ class User {
   @Column()
   password: number;
 
+  @Column()
+  role: string;
+
   @CreateDateColumn()
   created_at: Date;
 

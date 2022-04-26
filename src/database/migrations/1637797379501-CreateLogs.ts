@@ -46,17 +46,17 @@ export class CreateLogs1637797379501 implements MigrationInterface {
                     isNullable: true,
                 },
                 {
-                    name: "precipitation_avg",
+                    name: "pressure_min",
                     type: "float",
                     isNullable: true,
                 },
                 {
-                    name: "precipitation_min",
+                    name: "pressure_max",
                     type: "float",
                     isNullable: true,
                 },
                 {
-                    name: "precipitation_max",
+                    name: "precipitation_acc",
                     type: "float",
                     isNullable: true,
                 },
@@ -82,6 +82,16 @@ export class CreateLogs1637797379501 implements MigrationInterface {
                 },
                 {
                     name: "wind_speed_avg",
+                    type: "float",
+                    isNullable: true,
+                },
+                {
+                    name: "wind_speed_min",
+                    type: "float",
+                    isNullable: true,
+                },
+                {
+                    name: "wind_speed_max",
                     type: "float",
                     isNullable: true,
                 },

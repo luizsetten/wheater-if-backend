@@ -30,13 +30,13 @@ class Log {
   pressure_avg: number;
 
   @Column()
-  precipitation_avg: number;
+  pressure_min: number;
 
   @Column()
-  precipitation_min: number;
+  pressure_max: number;
 
   @Column()
-  precipitation_max: number;
+  precipitation_acc: number;
 
   @Column()
   solar_incidence_avg: number;
@@ -52,6 +52,12 @@ class Log {
 
   @Column()
   wind_speed_avg: number;
+
+  @Column()
+  wind_speed_min: number;
+
+  @Column()
+  wind_speed_max: number;
 
   @Column()
   reference_date: Date;
