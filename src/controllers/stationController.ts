@@ -1,10 +1,11 @@
-import { Record } from "../entities/Record";
-import { Request, Response } from "express";
-import { getConnection } from "typeorm";
+import { Request, Response } from 'express';
+import { getConnection } from 'typeorm';
+import { Record } from '../entities/Record';
+import { Station } from '../entities/Station';
 
 export class StationController {
   public async create(request: Request, response: Response): Promise<void> {
-    response.send({ ok: true })
+    response.send({ ok: true });
     // try {
 
     //   const record = new Record();
@@ -32,7 +33,6 @@ export class StationController {
 
     //   const windDirectionResolved = windDir ? mode(windDir) : undefined;
 
-
     //   Object.assign(record, {
     //     temperature,
     //     humidity,
@@ -56,12 +56,16 @@ export class StationController {
   }
 
   async list(request: Request, response: Response): Promise<void> {
-    response.send({
-      stations: [{
-        name: "IFSULDEMINAS 1",
-        id: "5663b746-744a-40a4-a590-a7ac9abc48d8"
-      }]
-    });
+    const conn = await getConnection();
+
+    const stations = await conn.getRepository(Station).find();
+
+    // [{
+    //   name: "IFSULDEMINAS 1",
+    //   id: "5663b746-744a-40a4-a590-a7ac9abc48d8"
+    // }]
+
+    response.send({ stations });
   }
 
   async findLast(request: Request, response: Response): Promise<void> {
@@ -71,17 +75,17 @@ export class StationController {
     if (station_id) {
       const record = await conn
         .getRepository(Record)
-        .createQueryBuilder("record")
-        .where("record.station_id = :id", { id: station_id })
-        .orderBy("created_at", "DESC")
+        .createQueryBuilder('record')
+        .where('record.stationId = :id', { id: station_id })
+        .orderBy('created_at', 'DESC')
         .getOne();
 
       response.send(record);
     } else {
       const record = await conn
         .getRepository(Record)
-        .createQueryBuilder("record")
-        .orderBy("created_at", "DESC")
+        .createQueryBuilder('record')
+        .orderBy('created_at', 'DESC')
         .getOne();
 
       response.send(record);

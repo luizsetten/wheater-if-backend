@@ -1,8 +1,8 @@
-import { hash } from "bcrypt"
+import { hash } from 'bcrypt';
 
-import { User } from "../entities/User";
-import { Request, Response } from "express";
-import { getConnection } from "typeorm";
+import { Request, Response } from 'express';
+import { getConnection } from 'typeorm';
+import { User } from '../entities/User';
 
 export class UsersController {
   public async create(request: Request, response: Response) {
@@ -12,7 +12,7 @@ export class UsersController {
 
     Object.assign(user, {
       email,
-      password: hash(password, 8)
+      password: hash(password, 8),
     });
 
     const conn = await getConnection();
@@ -21,11 +21,11 @@ export class UsersController {
 
     if (userAlreadyExists) {
       return response.status(503).json({
-        message: "User already exists!"
+        message: 'User already exists!',
       });
     }
 
-    const saved = conn.manager.save(user);
+    await conn.manager.save(user);
 
     return response.status(201).send();
   }
@@ -35,8 +35,8 @@ export class UsersController {
 
     const user = await conn
       .getRepository(User)
-      .createQueryBuilder("user")
-      .where("user.email = :email", { email })
+      .createQueryBuilder('user')
+      .where('user.email = :email', { email })
       .getOne();
 
     return user;

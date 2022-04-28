@@ -1,47 +1,53 @@
 {
-    "env": {
-        "es2021": true,
-        "node": true
+  "env": {
+    "es2021": true,
+    "node": true
+  },
+  "extends": [
+    "airbnb"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
     },
-    "extends": [
-        "plugin:react/recommended",
-        "airbnb"
-    ],
-    "parser": "@typescript-eslint/parser",
-    "parserOptions": {
-        "ecmaFeatures": {
-            "jsx": true
-        },
-        "ecmaVersion": 2016,
-        "sourceType": "module"
-    },
-    "plugins": [
-        "react",
-        "@typescript-eslint"
-    ],
-    "settings": {
-        "import/resolver": {
-            "typescript": {}
-        }
-    },
-    "rules": {
-        "import/prefer-default-export": "off",
-        "import/extensions": [
-            "error",
-            "ignorePackages",
-            {
-                "js": "never",
-                "jsx": "never",
-                "ts": "never",
-                "tsx": "never"
-            }
-        ],
-        "indent": [
-            "error",
-            2,
-            {
-                "MemberExpression": 1
-            }
-        ],
+    "ecmaVersion": 2016,
+    "sourceType": "module"
+  },
+  "plugins": [
+    "react",
+    "@typescript-eslint"
+  ],
+  "settings": {
+    "import/resolver": {
+      "typescript": {}
     }
+  },
+  "rules": {
+    "import/prefer-default-export": "off",
+    "no-shadow": "off",
+    "camelcase": "off",
+    "no-param-reassign": "off",
+    "implicit-arrow-linebreak": "off",
+    "class-methods-use-this": "off",
+    "comma-dangle": "off",
+    "no-return-assign": "off",
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "never",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never"
+      }
+    ],
+    "indent": [
+      "error",
+      2,
+      {
+        "MemberExpression": 1
+      }
+    ]
+  }
 }

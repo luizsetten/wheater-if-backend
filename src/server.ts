@@ -1,25 +1,25 @@
-import "reflect-metadata";
+import 'reflect-metadata';
 import express, { Request, Response } from 'express';
-import cors from "cors";
+import cors from 'cors';
 
 import './config/datasabe';
 
 import { LogsController } from './controllers/logsController';
 import { RecordController } from './controllers/recordController';
-import { UsersController } from "./controllers/usersController";
-import { StationController } from "./controllers/stationController";
+import { UsersController } from './controllers/usersController';
+import { StationController } from './controllers/stationController';
 
 const app = express();
 app.use(express.json());
 app.use(cors());
 
-const recordController = new RecordController()
-const logsController = new LogsController()
+const recordController = new RecordController();
+const logsController = new LogsController();
 const usersController = new UsersController();
 const stationController = new StationController();
 
 app.get('/', (request: Request, response: Response) => {
-  console.log("Refletiu aqui")
+  console.log('Refletiu aqui');
   response.sendStatus(200);
 });
 

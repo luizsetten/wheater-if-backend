@@ -6,67 +6,67 @@ import {
 @Entity('logs')
 class Log {
   @PrimaryColumn()
-  id?: string;
+    id?: string;
 
   @Column()
-  temperature_avg: number;
+    temperature_avg: number;
 
   @Column()
-  temperature_min: number;
+    temperature_min: number;
 
   @Column()
-  temperature_max: number;
+    temperature_max: number;
 
   @Column()
-  humidity_avg: number;
+    humidity_avg: number;
 
   @Column()
-  humidity_min: number;
+    humidity_min: number;
 
   @Column()
-  humidity_max: number;
+    humidity_max: number;
 
   @Column()
-  pressure_avg: number;
+    pressure_avg: number;
 
   @Column()
-  pressure_min: number;
+    pressure_min: number;
 
   @Column()
-  pressure_max: number;
+    pressure_max: number;
 
   @Column()
-  precipitation_acc: number;
+    precipitation_acc: number;
 
   @Column()
-  solar_incidence_avg: number;
+    solar_incidence_avg: number;
 
   @Column()
-  solar_incidence_min: number;
+    solar_incidence_min: number;
 
   @Column()
-  solar_incidence_max: number;
+    solar_incidence_max: number;
 
   @Column()
-  wind_direction_avg: number;
+    wind_direction_avg: number;
 
   @Column()
-  wind_speed_avg: number;
+    wind_speed_avg: number;
 
   @Column()
-  wind_speed_min: number;
+    wind_speed_min: number;
 
   @Column()
-  wind_speed_max: number;
+    wind_speed_max: number;
 
   @Column()
-  reference_date: Date;
+    reference_date: Date;
 
   @Column()
-  station_id: string;
+    stationId: string;
 
   @CreateDateColumn()
-  created_at: Date;
+    created_at: Date;
 
   constructor() {
     if (!this.id) {
@@ -75,4 +75,4 @@ class Log {
   }
 }
 
-export { Log }
+export { Log };

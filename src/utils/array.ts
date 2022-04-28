@@ -1,5 +1,4 @@
-const onlyUnique = (value: unknown, index: number, array: unknown[]) => {
-  return array.indexOf(value) === index;
-}
+const onlyUnique = (value: unknown, index: number, array: unknown[]) =>
+  array.indexOf(value) === index;
 
-export { onlyUnique }
+export { onlyUnique };
