@@ -26,6 +26,9 @@ app.get('/', (request: Request, response: Response) => {
 app.post('/users', usersController.create);
 
 app.get('/stations', stationController.list);
+app.post('/stations', stationController.create);
+app.put('/stations', stationController.update);
+// app.delete('/stations', stationController.update);
 
 app.get('/records', recordController.list);
 app.get('/records/:station_id', recordController.list);

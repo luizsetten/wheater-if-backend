@@ -14,6 +14,7 @@ export class CreateStations1651034125333 implements MigrationInterface {
       {
         name: 'name',
         type: 'varchar',
+        isUnique: true,
       },
       {
         name: 'location',

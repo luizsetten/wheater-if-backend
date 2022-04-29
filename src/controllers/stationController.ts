@@ -1,61 +1,76 @@
 import { Request, Response } from 'express';
 import { getConnection } from 'typeorm';
-import { Record } from '../entities/Record';
 import { Station } from '../entities/Station';
 
 export class StationController {
-  public async create(request: Request, response: Response): Promise<void> {
-    response.send({ ok: true });
-    // try {
+  async create(request: Request, response: Response): Promise<void> {
+    const station = new Station();
 
-    //   const record = new Record();
+    const {
+      body: {
+        name,
+        latitude,
+        longitude,
+        location,
+        user
+      }
+    } = request;
 
-    //   const { body: {
-    //     temperature,
-    //     humidity,
-    //     pressure,
-    //     solar_incidence,
-    //     wind_direction,
-    //     wind_speed,
-    //     precipitation,
-    //     station_id,
-    //   } } = request;
+    const foundStation = await this.findByName(name);
+    if (foundStation) {
+      response.status(401).send({ error: 'Station name already exists' });
+      return;
+    }
 
-    //   const windDir: Array<number> = String(wind_direction).split(',').map(item => Number(item));
-    //   console.log("Salvou!", record.id, wind_direction);
+    Object.assign(station, {
+      name,
+      latitude,
+      longitude,
+      location,
+      user
+    });
 
-    //   function mode(arr: Array<number>) {
-    //     return arr.sort((a, b) =>
-    //       arr.filter(v => v === a).length
-    //       - arr.filter(v => v === b).length
-    //     ).pop();
-    //   }
+    const conn = await getConnection();
 
-    //   const windDirectionResolved = windDir ? mode(windDir) : undefined;
+    const saved = await conn.manager.save(station);
 
-    //   Object.assign(record, {
-    //     temperature,
-    //     humidity,
-    //     pressure,
-    //     precipitation,
-    //     solar_incidence,
-    //     wind_direction: windDirectionResolved,
-    //     wind_speed,
-    //     station_id,
-    //   });
-
-    //   const conn = await getConnection();
-
-    //   const saved = await conn.manager.save(record);
-
-    //   response.send(saved);
-    // } catch (e) {
-    //   console.log(e);
-    //   response.sendStatus(500);
-    // }
+    response.send(saved);
   }
 
-  async list(request: Request, response: Response): Promise<void> {
+  async update(request: Request, response: Response): Promise<void> {
+    const {
+      body: {
+        name,
+        latitude,
+        longitude,
+        location,
+        id
+      }
+    } = request;
+
+    const station = await this.findById(id);
+
+    const foundName = await this.findByName(name);
+    if (foundName && foundName.id !== id) {
+      response.status(401).send({ error: 'Station name already exists' });
+      return;
+    }
+
+    Object.assign(station, {
+      name,
+      latitude,
+      longitude,
+      location
+    });
+
+    const conn = await getConnection();
+
+    const saved = await conn.manager.save(station);
+
+    response.send(saved);
+  }
+
+  async list(_request: Request, response: Response): Promise<void> {
     const conn = await getConnection();
 
     const stations = await conn.getRepository(Station).find();
@@ -68,27 +83,27 @@ export class StationController {
     response.send({ stations });
   }
 
-  async findLast(request: Request, response: Response): Promise<void> {
-    const { station_id } = request.query;
+  async findByName(name: string) {
     const conn = await getConnection();
 
-    if (station_id) {
-      const record = await conn
-        .getRepository(Record)
-        .createQueryBuilder('record')
-        .where('record.stationId = :id', { id: station_id })
-        .orderBy('created_at', 'DESC')
-        .getOne();
+    const station = await conn
+      .getRepository(Station)
+      .createQueryBuilder('station')
+      .where('station.name = :name', { name })
+      .getOne();
 
-      response.send(record);
-    } else {
-      const record = await conn
-        .getRepository(Record)
-        .createQueryBuilder('record')
-        .orderBy('created_at', 'DESC')
-        .getOne();
+    return station;
+  }
 
-      response.send(record);
-    }
+  async findById(id: string) {
+    const conn = await getConnection();
+
+    const station = await conn
+      .getRepository(Station)
+      .createQueryBuilder('station')
+      .where('station.id = :id', { id })
+      .getOne();
+
+    return station;
   }
 }
