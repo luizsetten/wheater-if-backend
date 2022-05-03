@@ -101,6 +101,10 @@ export class CreateLogs1637797379501 implements MigrationInterface {
           isNullable: true,
         },
         {
+          name: 'records_amount',
+          type: 'int'
+        },
+        {
           name: 'reference_date',
           type: 'timestamp',
           default: 'now()',

@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { Request, Response } from 'express';
 import { getConnection } from 'typeorm';
 
@@ -47,12 +48,35 @@ export class LogsController {
         wind_speed_max: Math.max(...wind_speed),
         wind_speed_min: Math.min(...wind_speed),
         wind_direction_avg: wind_direction.reduce((acc, obj) => acc += obj, 0) / records.length,
-        reference_date,
+        records_amount: records.length,
         stationId: records[0].stationId,
+        reference_date,
       } as Log);
 
       return log;
     };
+
+    const mergeLogs = (oldLog: Log, newLog: Log) => ({
+      ...oldLog,
+      temperature_avg: ((oldLog.temperature_avg * oldLog.records_amount) + (newLog.temperature_avg * newLog.records_amount)) / oldLog.records_amount + newLog.records_amount,
+      temperature_max: Math.max(oldLog.temperature_max, newLog.humidity_max),
+      temperature_min: Math.min(oldLog.temperature_min, newLog.temperature_min),
+      humidity_avg: ((oldLog.humidity_avg * oldLog.records_amount) + (newLog.humidity_avg * newLog.records_amount)) / oldLog.records_amount + newLog.records_amount,
+      humidity_max: Math.max(oldLog.humidity_max, newLog.humidity_max),
+      humidity_min: Math.min(oldLog.humidity_min, newLog.humidity_min),
+      precipitation_acc: oldLog.precipitation_acc + newLog.precipitation_acc,
+      solar_incidence_avg: ((oldLog.solar_incidence_avg * oldLog.records_amount) + (newLog.solar_incidence_avg * newLog.records_amount)) / oldLog.records_amount + newLog.records_amount,
+      solar_incidence_max: Math.max(oldLog.solar_incidence_max, newLog.humidity_max),
+      solar_incidence_min: Math.min(oldLog.solar_incidence_min, newLog.solar_incidence_min),
+      pressure_avg: ((oldLog.pressure_avg * oldLog.records_amount) + (newLog.pressure_avg * newLog.records_amount)) / oldLog.records_amount + newLog.records_amount,
+      pressure_max: Math.max(oldLog.pressure_max, newLog.humidity_max),
+      pressure_min: Math.min(oldLog.pressure_min, newLog.pressure_min),
+      wind_speed_avg: ((oldLog.wind_speed_avg * oldLog.records_amount) + (newLog.wind_speed_avg * newLog.records_amount)) / oldLog.records_amount + newLog.records_amount,
+      wind_speed_max: Math.max(oldLog.wind_speed_max, newLog.humidity_max),
+      wind_speed_min: Math.min(oldLog.wind_speed_min, newLog.wind_speed_min),
+      wind_direction_avg: ((oldLog.wind_direction_avg * oldLog.records_amount) + (newLog.wind_direction_avg * newLog.records_amount)) / oldLog.records_amount + newLog.records_amount,
+      records_amount: oldLog.records_amount + newLog.records_amount,
+    });
 
     const conn = getConnection();
 
@@ -80,10 +104,21 @@ export class LogsController {
       const grouped: Object = groupByTime(stationRecords);
 
       const values: Record[][] = Object.values(grouped);
-      values.forEach((records) => {
+      values.forEach(async (records) => {
         const log = createLog(records);
 
-        conn.getRepository(Log).save(log);
+        const logFound = await conn.getRepository(Log)
+          .createQueryBuilder('log')
+          .where('log.stationId = :station_id', { station_id: station })
+          .andWhere('log.reference_date = :reference_date', { reference_date: log.reference_date })
+          .getOne();
+
+        if (logFound) {
+          const logMerged = mergeLogs(logFound, log);
+          await conn.getRepository(Log).save(logMerged);
+        } else {
+          await conn.getRepository(Log).save(log);
+        }
       });
     });
 
@@ -145,12 +180,14 @@ export class LogsController {
       pressure_avg: log.pressure_avg.toFixed(2).replace('.', ','),
       pressure_min: log.pressure_min.toFixed(2).replace('.', ','),
       pressure_max: log.pressure_max.toFixed(2).replace('.', ','),
-      precipitation_avg: log.precipitation_acc.toFixed(2).replace('.', ','),
+      precipitation_acc: log.precipitation_acc.toFixed(2).replace('.', ','),
       solar_incidence_avg: log.solar_incidence_avg.toFixed(2).replace('.', ','),
       solar_incidence_min: log.solar_incidence_min.toFixed(2).replace('.', ','),
       solar_incidence_max: log.solar_incidence_max.toFixed(2).replace('.', ','),
       wind_direction_avg: log.wind_direction_avg,
       wind_speed_avg: log.wind_speed_avg.toFixed(2).replace('.', ','),
+      wind_speed_min: log.wind_speed_min.toFixed(2).replace('.', ','),
+      wind_speed_max: log.wind_speed_max.toFixed(2).replace('.', ','),
       date: format(log.reference_date, 'dd/MM/yyyy'),
       hours: format(log.reference_date, 'HH:mm'),
     }));
@@ -169,7 +206,7 @@ export class LogsController {
         { value: 'humidity_avg', label: 'Humidade Média (%)' },
         { value: 'humidity_max', label: 'Humidade Máxima (%)' },
         { value: 'humidity_min', label: 'Humidade Mínima (%)' },
-        { value: 'precipitation', label: 'Precipitação Acumulada (mm)' },
+        { value: 'precipitation_acc', label: 'Precipitação Acumulada (mm)' },
         { value: 'solar_incidence_avg', label: 'Incidência Solar Média (mW/m²)' },
         { value: 'solar_incidence_max', label: 'Incidência Solar Máxima (mW/m²)' },
         { value: 'solar_incidence_min', label: 'Incidência Solar Mínima (mW/m²)' },
