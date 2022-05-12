@@ -7,25 +7,25 @@ import { User } from './User';
 @Entity('stations')
 class Station {
   @PrimaryColumn()
-    id?: string;
+  id?: string;
 
   @Column()
-    name: string;
+  name: string;
 
   @ManyToOne(() => User, (user) => user.stations)
-    user: User;
+  user: User;
 
   @Column()
-    latitude: number;
+  latitude: number;
 
   @Column()
-    longitude: number;
+  longitude: number;
 
   @Column()
-    location: string;
+  location: string;
 
   @CreateDateColumn()
-    created_at: Date;
+  created_at: Date;
 
   constructor() {
     if (!this.id) {

@@ -8,6 +8,7 @@ export class AddForeignKeyLogsRecords1651117470964 implements MigrationInterface
         columnNames: ['stationId'],
         referencedColumnNames: ['id'],
         referencedTableName: 'stations',
+        onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
       }),
     );
@@ -18,6 +19,7 @@ export class AddForeignKeyLogsRecords1651117470964 implements MigrationInterface
         columnNames: ['stationId'],
         referencedColumnNames: ['id'],
         referencedTableName: 'stations',
+        onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
       }),
     );

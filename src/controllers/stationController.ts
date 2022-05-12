@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { getConnection } from 'typeorm';
 import { Station } from '../entities/Station';
+import { UsersController } from './usersController';
 
 export class StationController {
   async create(request: Request, response: Response): Promise<void> {
@@ -17,6 +18,7 @@ export class StationController {
     } = request;
 
     const foundStation = await this.findByName(name);
+
     if (foundStation) {
       response.status(401).send({ error: 'Station name already exists' });
       return;
@@ -44,11 +46,20 @@ export class StationController {
         latitude,
         longitude,
         location,
-        id
+        id,
+        user
       }
     } = request;
 
+    const usersController = new UsersController();
+    const userFound = await usersController.findById(user);
+
     const station = await this.findById(id);
+
+    if (!(userFound?.role === 'admin' || station?.user?.id === userFound?.id)) {
+      response.status(401).send({ error: "You don't have permissions to edit this station" });
+      return;
+    }
 
     const foundName = await this.findByName(name);
     if (foundName && foundName.id !== id) {
@@ -83,6 +94,20 @@ export class StationController {
     response.send({ stations });
   }
 
+  async listByUser(request: Request, response: Response) {
+    const { user_id } = request.params;
+
+    const conn = await getConnection();
+
+    const stations = await conn
+      .getRepository(Station)
+      .createQueryBuilder('station')
+      .where('station.userId = :user_id', { user_id })
+      .getMany();
+
+    return response.send({ stations });
+  }
+
   async findByName(name: string) {
     const conn = await getConnection();
 
@@ -102,6 +127,7 @@ export class StationController {
       .getRepository(Station)
       .createQueryBuilder('station')
       .where('station.id = :id', { id })
+      .leftJoinAndSelect('station.user', 'user')
       .getOne();
 
     return station;

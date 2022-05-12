@@ -23,11 +23,13 @@ app.get('/', (request: Request, response: Response) => {
   response.sendStatus(200);
 });
 
-app.post('/users', usersController.create);
+app.post('/users', usersController.create.bind(usersController));
+app.post('/users/authenticate', usersController.authenticate.bind(usersController));
 
 app.get('/stations', stationController.list);
-app.post('/stations', stationController.create);
-app.put('/stations', stationController.update);
+app.get('/stations/:user_id', stationController.listByUser.bind(stationController));
+app.post('/stations', stationController.create.bind(stationController));
+app.put('/stations', stationController.update.bind(stationController));
 // app.delete('/stations', stationController.update);
 
 app.get('/records', recordController.list);

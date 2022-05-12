@@ -7,26 +7,27 @@ import { Station } from './Station';
 @Entity('users')
 class User {
   @PrimaryColumn()
-    id?: string;
+  id?: string;
 
   @Column()
-    email: string;
+  email: string;
 
   @Column()
-    password: number;
+  password: string;
 
   @Column()
-    role: string;
+  role: string;
 
   @OneToMany(() => Station, (station) => station.user)
-    stations: Station[];
+  stations: Station[];
 
   @CreateDateColumn()
-    created_at: Date;
+  created_at: Date;
 
   constructor() {
     if (!this.id) {
       this.id = uuidV4();
+      this.role = 'user';
     }
   }
 }

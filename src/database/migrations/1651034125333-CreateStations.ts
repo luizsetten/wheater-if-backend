@@ -46,7 +46,8 @@ export class CreateStations1651034125333 implements MigrationInterface {
         columnNames: ['userId'],
         referencedColumnNames: ['id'],
         referencedTableName: 'users',
-        onDelete: 'SET NULL',
+        onUpdate: 'CASCADE',
+        onDelete: 'SET NULL'
       }],
     }));
   }
