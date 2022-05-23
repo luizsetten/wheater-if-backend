@@ -22,7 +22,7 @@ export class UsersController {
     const userAlreadyExists = await this.findByEmail(email);
 
     if (userAlreadyExists) {
-      return response.status(503).json({
+      return response.status(409).json({
         message: 'User already exists!',
       });
     }
@@ -35,7 +35,7 @@ export class UsersController {
   async list(request: Request, response: Response) {
     const { user: { role } } = request.body;
 
-    if (role !== 'admin') return response.status(403).json({ message: 'User needs to de admin' });
+    if (role !== 'admin') return response.status(401).json({ message: 'User needs to de admin' });
 
     const conn = await getConnection();
 
@@ -78,19 +78,19 @@ export class UsersController {
       }
     } = request;
 
-    const usersController = new UsersController();
-    const userFound = await usersController.findById(user);
+    // const usersController = new UsersController();
+    // const userFound = await usersController.findById(user);
 
     const userToEditFound = await this.findById(id);
 
-    if (!(userFound?.role === 'admin')) {
+    if (!(user.role === 'admin' || user.id === id)) {
       response.status(401).send({ error: "You don't have permissions to edit this user" });
       return;
     }
 
     const foundEmail = await this.findByEmail(email);
     if (foundEmail && foundEmail.id !== id) {
-      response.status(401).send({ error: 'User email already exists' });
+      response.status(409).send({ error: 'User email already exists' });
       return;
     }
 
@@ -112,7 +112,7 @@ export class UsersController {
     const user = await this.findByEmail(email);
 
     if (!user || await compare(user.password, password)) {
-      return response.status(503).json({
+      return response.status(401).json({
         message: 'Invalid email or password!',
       });
     }

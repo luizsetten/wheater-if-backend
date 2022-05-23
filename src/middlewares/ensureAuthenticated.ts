@@ -15,7 +15,7 @@ export async function ensureAuthenticated(
 
   if (!authHeader) {
     // throw new Error("Token missing");
-    return response.status(403).json({ message: 'No token provided' });
+    return response.status(400).json({ message: 'No token provided' });
   }
 
   const [, token] = authHeader.split(' ');
@@ -37,6 +37,6 @@ export async function ensureAuthenticated(
     return next();
   } catch {
     // throw new Error("Invalid token");
-    return response.status(403).json({ message: 'Invalid token' });
+    return response.status(400).json({ message: 'Invalid token' });
   }
 }

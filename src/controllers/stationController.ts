@@ -19,7 +19,7 @@ export class StationController {
     const foundStation = await this.findByName(name);
 
     if (foundStation) {
-      response.status(401).send({ error: 'Station name already exists' });
+      response.status(409).send({ error: 'Station name already exists' });
       return;
     }
 
@@ -59,7 +59,7 @@ export class StationController {
 
     const foundName = await this.findByName(name);
     if (foundName && foundName.id !== id) {
-      response.status(401).send({ error: 'Station name already exists' });
+      response.status(409).send({ error: 'Station name already exists' });
       return;
     }
 
