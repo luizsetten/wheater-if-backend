@@ -1,6 +1,7 @@
 import {
   MigrationInterface, QueryRunner, Table,
 } from 'typeorm';
+import { Station } from '../../entities/Station';
 
 export class CreateStations1651034125333 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
@@ -50,6 +51,15 @@ export class CreateStations1651034125333 implements MigrationInterface {
         onDelete: 'SET NULL'
       }],
     }));
+
+    if (process.env.STATION_ID) {
+      await queryRunner.manager.save(
+        queryRunner.manager.create<Station>(Station, {
+          name: 'IFSULDEMINAS 1',
+          id: process.env.STATION_ID
+        })
+      );
+    }
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {

@@ -1,4 +1,7 @@
+import { hash } from 'bcrypt';
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
+import { v4 } from 'uuid';
+import { User } from '../../entities/User';
 
 export class CreateUsers1648088037083 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
@@ -32,6 +35,19 @@ export class CreateUsers1648088037083 implements MigrationInterface {
         ],
       }),
     );
+
+    if (process.env.ADMIN_PASSWORD && process.env.ADMIN_USERNAME) {
+      const hashPassword = await hash(process.env.ADMIN_PASSWORD!, 8);
+
+      await queryRunner.manager.save(
+        queryRunner.manager.create<User>(User, {
+          email: process.env.ADMIN_USERNAME,
+          role: 'admin',
+          password: hashPassword,
+          id: v4()
+        })
+      );
+    }
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {

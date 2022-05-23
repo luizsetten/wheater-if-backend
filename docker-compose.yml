@@ -8,9 +8,9 @@ services:
     ports:
       - 5432:5432
     environment:
-      - POSTGRES_USER=wheater
-      - POSTGRES_PASSWORD=umbelodiaparaestudarnoif
-      - POSTGRES_DB=wheater
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_DATABASE}
     volumes:
       - pgdata:/data/postgres
 
