@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import { getConnection } from 'typeorm';
 import { Station } from '../entities/Station';
-import { UsersController } from './usersController';
 
 export class StationController {
   async create(request: Request, response: Response): Promise<void> {
@@ -29,7 +28,7 @@ export class StationController {
       latitude,
       longitude,
       location,
-      user
+      user: user.id
     });
 
     const conn = await getConnection();
@@ -51,12 +50,9 @@ export class StationController {
       }
     } = request;
 
-    const usersController = new UsersController();
-    const userFound = await usersController.findById(user);
-
     const station = await this.findById(id);
 
-    if (!(userFound?.role === 'admin' || station?.user?.id === userFound?.id)) {
+    if (!(user?.role === 'admin' || station?.user?.id === user?.id)) {
       response.status(401).send({ error: "You don't have permissions to edit this station" });
       return;
     }
@@ -71,7 +67,7 @@ export class StationController {
       name,
       latitude,
       longitude,
-      location
+      location,
     });
 
     const conn = await getConnection();
@@ -95,7 +91,11 @@ export class StationController {
   }
 
   async listByUser(request: Request, response: Response) {
-    const { user_id } = request.params;
+    const {
+      user: {
+        id: user_id
+      }
+    } = request.body;
 
     const conn = await getConnection();
 

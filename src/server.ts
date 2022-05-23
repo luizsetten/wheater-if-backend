@@ -4,6 +4,7 @@ import cors from 'cors';
 
 import './config/datasabe';
 
+import { ensureAuthenticated } from './middlewares/ensureAuthenticated';
 import { LogsController } from './controllers/logsController';
 import { RecordController } from './controllers/recordController';
 import { UsersController } from './controllers/usersController';
@@ -25,12 +26,14 @@ app.get('/', (request: Request, response: Response) => {
 
 app.post('/users', usersController.create.bind(usersController));
 app.post('/users/authenticate', usersController.authenticate.bind(usersController));
+app.put('/users', ensureAuthenticated, usersController.update.bind(usersController));
+app.get('/users', ensureAuthenticated, usersController.list);
 
 app.get('/stations', stationController.list);
-app.get('/stations/:user_id', stationController.listByUser.bind(stationController));
-app.post('/stations', stationController.create.bind(stationController));
-app.put('/stations', stationController.update.bind(stationController));
-// app.delete('/stations', stationController.update);
+app.get('/stations/mine', ensureAuthenticated, stationController.listByUser.bind(stationController));
+app.post('/stations', ensureAuthenticated, stationController.create.bind(stationController));
+app.put('/stations', ensureAuthenticated, stationController.update.bind(stationController));
+// app.delete('/stations', ensureAuthenticated, stationController.update);
 
 app.get('/records', recordController.list);
 app.get('/records/:station_id', recordController.list);
