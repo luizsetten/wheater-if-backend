@@ -120,7 +120,7 @@ export class UsersController {
     const token = sign({
       email: user.email,
       role: user.role
-    }, '17a1ab8c7a756f5283ee5db6b1d62fff', {
+    }, process.env.SECRET, {
       subject: user.id,
       expiresIn: '1d'
     });

@@ -21,7 +21,7 @@ export async function ensureAuthenticated(
   const [, token] = authHeader.split(' ');
 
   try {
-    const decoded = verify(token, '17a1ab8c7a756f5283ee5db6b1d62fff') as IPayload;
+    const decoded = verify(token, process.env.SECRET) as IPayload;
 
     const usersController = new UsersController();
 
