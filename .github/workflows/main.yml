@@ -33,5 +33,5 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
-          source: "., !node_modules"
-          target: "wheater-if"
+          source: "."
+          target: "app/wheater-if-backend"
