@@ -1,0 +1,17 @@
+{
+  "type": "postgres",
+  "host": "localhost",
+  "port": 5432,
+  "username": "wheater",
+  "password": "umbelodiaparaestudarnoif",
+  "database": "wheater",
+  "migrations": [
+    "./dist/database/migrations/*.js"
+  ],
+  "entities": [
+    "./dist/entities/*.js"
+  ],
+  "cli": {
+    "migrationsDir": "./dist/database/migrations"
+  }
+}
