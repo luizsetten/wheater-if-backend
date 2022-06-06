@@ -103,8 +103,7 @@ export class StationController {
     if (role === 'admin') {
       const stations = await conn
         .getRepository(Station)
-        .createQueryBuilder('station')
-        .getMany();
+        .find();
 
       return response.send({ stations });
     }
