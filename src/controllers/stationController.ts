@@ -93,11 +93,21 @@ export class StationController {
   async listByUser(request: Request, response: Response) {
     const {
       user: {
-        id: user_id
+        id: user_id,
+        role
       }
     } = request.body;
 
     const conn = await getConnection();
+
+    if (role === 'admin') {
+      const stations = await conn
+        .getRepository(Station)
+        .createQueryBuilder('station')
+        .getMany();
+
+      return response.send({ stations });
+    }
 
     const stations = await conn
       .getRepository(Station)
