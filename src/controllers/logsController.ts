@@ -23,12 +23,7 @@ export class LogsController {
       const solar_incidence = records.map(({ solar_incidence }) => solar_incidence);
 
       const date = records[0].created_at;
-      const reference_date = new Date(
-        date.getFullYear(),
-        date.getMonth(),
-        date.getDate(),
-        date.getHours()
-      );
+      const reference_date = new Date(date.setMinutes(0, 0, 0));
 
       Object.assign(log, {
         temperature_avg: temperature.reduce((acc, obj) => acc += obj, 0) / records.length,
