@@ -25,9 +25,10 @@ export class RecordController {
       } = request;
 
       const windDir: Array<number> = String(wind_direction).split(',').map((item) => Number(item));
-      console.log('Salvou!', record.id, request.body);
 
       const windDirectionResolved = windDir ? mode(windDir) : 0;
+
+      console.log('Salvou!', record.id, request.body);
 
       Object.assign(record, {
         temperature,

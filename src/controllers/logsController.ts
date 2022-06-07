@@ -122,11 +122,11 @@ export class LogsController {
       });
     });
 
-    await conn
-      .createQueryBuilder()
-      .delete()
-      .from(Record)
-      .execute();
+    // await conn
+    //   .createQueryBuilder()
+    //   .delete()
+    //   .from(Record)
+    //   .execute();
 
     recordsToRestore.forEach((record) => {
       conn.getRepository(Record).save(record);
