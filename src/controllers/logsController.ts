@@ -27,7 +27,7 @@ export class LogsController {
         date.getFullYear(),
         date.getMonth(),
         date.getDate(),
-        date.getHours() - 3
+        date.getHours()
       );
 
       Object.assign(log, {
