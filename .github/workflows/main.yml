@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, develop ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, develop ]
 
   workflow_dispatch:
 
@@ -29,22 +29,22 @@ jobs:
       - name: Copy files via SSH
         uses: appleboy/scp-action@master
         with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
-          port: ${{ secrets.SSH_PORT }}
+          host: ${{ secrets.SSH_HOST_IF }}
+          username: ${{ secrets.SSH_USER_IF }}
+          password: ${{ secrets.PASSWORD_IF }}
+          port: ${{ secrets.SSH_PORT_IF }}
           source: "., !node_modules"
-          target: "app/wheater-if-backend"
+          target: "backend"
           
       - name: SSH Remote Commands
         uses: appleboy/ssh-action@v0.1.4
         with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
-          port: ${{ secrets.SSH_PORT }}
+          host: ${{ secrets.SSH_HOST_IF }}
+          username: ${{ secrets.SSH_USER_IF }}
+          password: ${{ secrets.PASSWORD_IF }}
+          port: ${{ secrets.SSH_PORT_IF }}
           script: |
-            cd ~/app/wheater-if-backend
+            cd ~/backend
             yarn
             yarn typeorm migration:run
             pm2 restart wheater-if
