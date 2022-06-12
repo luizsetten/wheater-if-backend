@@ -6,12 +6,15 @@
   "password": "umbelodiaparaestudarnoif",
   "database": "wheater",
   "migrations": [
-    "./dist/database/migrations/*.js"
+    "./database/migrations/*.js",
+    "./src/database/migrations/*.ts"
   ],
   "entities": [
-    "./dist/entities/*.js"
+    "./entities/*.js",
+    "./dist/entities/*.js",
+    "./src/entities/*.ts"
   ],
   "cli": {
-    "migrationsDir": "./dist/database/migrations"
+    "migrationsDir": "./src/database/migrations"
   }
 }
