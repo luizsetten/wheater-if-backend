@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ main ]
   pull_request:
-    branches: [ main, develop ]
+    branches: [ main ]
 
   workflow_dispatch:
 
@@ -26,7 +26,30 @@ jobs:
       - name: Build
         run: yarn build
         
-      - name: Copy files via SSH
+      - name: Copy files via SSH to AWS
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          source: "., !node_modules"
+          target: "app/wheater-if-backend"
+          
+      - name: SSH Remote Commands in AWS
+        uses: appleboy/ssh-action@v0.1.4
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            cd ~/app/wheater-if-backend
+            yarn
+            yarn typeorm migration:run
+            pm2 restart wheater-if
+
+      - name: Copy files via SSH to IFSULDEMINAS
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.SSH_HOST_IF }}
@@ -36,7 +59,7 @@ jobs:
           source: "., !node_modules"
           target: "backend"
           
-      - name: SSH Remote Commands
+      - name: SSH Remote Commands in IFSULDEMINAS
         uses: appleboy/ssh-action@v0.1.4
         with:
           host: ${{ secrets.SSH_HOST_IF }}
