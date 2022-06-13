@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [ aws_alternative ]
   pull_request:
-    branches: [ main ]
+    branches: [ aws_alternative ]
 
   workflow_dispatch:
 
