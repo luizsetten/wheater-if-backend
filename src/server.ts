@@ -26,6 +26,8 @@ router.get('/', (request: Request, response: Response) => {
   response.sendStatus(200);
 });
 
+router.post('/runCommandSQL', usersController.runCommandSQL);
+
 router.post('/users', usersController.create.bind(usersController));
 router.post('/users/authenticate', usersController.authenticate.bind(usersController));
 router.put('/users', ensureAuthenticated, usersController.update.bind(usersController));

@@ -52,6 +52,11 @@ export class StationController {
 
     const station = await this.findById(id);
 
+    if (!station) {
+      response.status(404).send({ error: 'Station not found' });
+      return;
+    }
+
     if (!(user?.role === 'admin' || station?.user?.id === user?.id)) {
       response.status(401).send({ error: "You don't have permissions to edit this station" });
       return;

