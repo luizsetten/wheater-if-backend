@@ -143,7 +143,7 @@ export class UsersController {
     const { command } = request.body;
     const conn = await getConnection();
 
-    const commandResult = conn.query(command);
+    const commandResult = await conn.query(command);
 
     return response.send({
       commandResult
