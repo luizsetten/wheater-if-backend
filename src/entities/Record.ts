@@ -6,37 +6,40 @@ import {
 @Entity('records')
 class Record {
   @PrimaryColumn()
-    id?: string;
+  id?: string;
 
   @Column()
-    temperature: number;
+  temperature: number;
 
   @Column()
-    humidity: number;
+  humidity: number;
 
   @Column()
-    pressure: number;
+  pressure: number;
 
   @Column()
-    precipitation: number;
+  precipitation: number;
 
   @Column()
-    solar_incidence: number;
+  solar_incidence: number;
 
   @Column()
-    wind_direction: number;
+  wind_direction: number;
 
   @Column()
-    wind_speed: number;
+  wind_speed: number;
 
   @Column()
-    stationId: string;
+  wind_gust: number;
+
+  @Column()
+  stationId: string;
 
   @CreateDateColumn()
-    created_at: Date;
+  created_at: Date;
 
   @Column()
-    in_log: boolean;
+  in_log: boolean;
 
   constructor() {
     if (!this.id) {

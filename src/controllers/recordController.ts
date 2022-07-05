@@ -19,6 +19,7 @@ export class RecordController {
           solar_incidence,
           wind_direction,
           wind_speed,
+          wind_gust,
           precipitation,
           station_id,
         },
@@ -38,6 +39,7 @@ export class RecordController {
         solar_incidence,
         wind_direction: windDirectionResolved,
         wind_speed,
+        wind_gust,
         stationId: station_id,
       });
 

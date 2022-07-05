@@ -1,9 +1,11 @@
+/* eslint-disable import/no-duplicates */
 /* eslint-disable max-len */
 import { Request, Response } from 'express';
 import { getConnection } from 'typeorm';
 
 import { parseAsync } from 'json2csv';
 import { format } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 import { Record } from '../entities/Record';
 import { Log } from '../entities/Log';
 import { groupByTime } from '../utils/time';
@@ -18,6 +20,7 @@ export class LogsController {
       const humidity = records.map(({ humidity }) => humidity);
       const pressure = records.map(({ pressure }) => pressure);
       const wind_speed = records.map(({ wind_speed }) => wind_speed);
+      const wind_gust = records.map(({ wind_gust }) => wind_gust);
       const wind_direction = records.map(({ wind_direction }) => wind_direction);
       const precipitation = records.map(({ precipitation }) => precipitation);
       const solar_incidence = records.map(({ solar_incidence }) => solar_incidence);
@@ -42,6 +45,9 @@ export class LogsController {
         wind_speed_avg: wind_speed.reduce((acc, obj) => acc += obj, 0) / records.length,
         wind_speed_max: Math.max(...wind_speed),
         wind_speed_min: Math.min(...wind_speed),
+        wind_gust_avg: wind_gust.reduce((acc, obj) => acc += obj, 0) / records.length,
+        wind_gust_max: Math.max(...wind_gust),
+        wind_gust_min: Math.min(...wind_gust),
         wind_direction_avg: wind_direction.reduce((acc, obj) => acc += obj, 0) / records.length,
         records_amount: records.length,
         stationId: records[0].stationId,
@@ -69,6 +75,9 @@ export class LogsController {
       wind_speed_avg: ((oldLog.wind_speed_avg * oldLog.records_amount) + (newLog.wind_speed_avg * newLog.records_amount)) / (oldLog.records_amount + newLog.records_amount),
       wind_speed_max: Math.max(oldLog.wind_speed_max, newLog.wind_speed_max),
       wind_speed_min: Math.min(oldLog.wind_speed_min, newLog.wind_speed_min),
+      wind_gust_avg: ((oldLog.wind_gust_avg * oldLog.records_amount) + (newLog.wind_gust_avg * newLog.records_amount)) / (oldLog.records_amount + newLog.records_amount),
+      wind_gust_max: Math.max(oldLog.wind_gust_max, newLog.wind_gust_max),
+      wind_gust_min: Math.min(oldLog.wind_gust_min, newLog.wind_gust_min),
       wind_direction_avg: ((oldLog.wind_direction_avg * oldLog.records_amount) + (newLog.wind_direction_avg * newLog.records_amount)) / (oldLog.records_amount + newLog.records_amount),
       records_amount: oldLog.records_amount + newLog.records_amount,
     });
@@ -183,8 +192,11 @@ export class LogsController {
       wind_speed_avg: log.wind_speed_avg.toFixed(2).replace('.', ','),
       wind_speed_min: log.wind_speed_min.toFixed(2).replace('.', ','),
       wind_speed_max: log.wind_speed_max.toFixed(2).replace('.', ','),
-      date: format(log.reference_date, 'dd/MM/yyyy'),
-      hours: format(log.reference_date, 'HH:mm'),
+      wind_gust_avg: log.wind_gust_avg.toFixed(2).replace('.', ','),
+      wind_gust_min: log.wind_gust_min.toFixed(2).replace('.', ','),
+      wind_gust_max: log.wind_gust_max.toFixed(2).replace('.', ','),
+      date: format(log.reference_date, 'dd/MM/yyyy', { locale: ptBR }),
+      hours: format(log.reference_date, 'HH:mm', { locale: ptBR }),
     }));
 
     const file = await parseAsync(logsFormatted, {
@@ -209,6 +221,9 @@ export class LogsController {
         { value: 'wind_speed_avg', label: 'Velocidade do Vento Média (m/s)' },
         { value: 'wind_speed_max', label: 'Velocidade do Vento Máxima (m/s)' },
         { value: 'wind_speed_min', label: 'Velocidade do Vento Mínima (m/s)' },
+        { value: 'wind_gust_avg', label: 'Rajada do Vento Média (m/s)' },
+        { value: 'wind_gust_max', label: 'Rajada do Vento Máxima (m/s)' },
+        { value: 'wind_gust_min', label: 'Rajada do Vento Mínima (m/s)' },
       ],
       delimiter: ';',
     });

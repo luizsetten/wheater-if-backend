@@ -60,6 +60,15 @@ class Log {
   wind_speed_max: number;
 
   @Column()
+  wind_gust_avg: number;
+
+  @Column()
+  wind_gust_min: number;
+
+  @Column()
+  wind_gust_max: number;
+
+  @Column()
   records_amount: number;
 
   @Column()
