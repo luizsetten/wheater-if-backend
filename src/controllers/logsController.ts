@@ -10,6 +10,7 @@ import { Record } from '../entities/Record';
 import { Log } from '../entities/Log';
 import { groupByTime } from '../utils/time';
 import { onlyUnique } from '../utils/array';
+import { convertToNumberFixed } from '../utils/converts';
 
 export class LogsController {
   async update(_request: Request, response: Response) {
@@ -175,26 +176,26 @@ export class LogsController {
 
     const logsFormatted = logs.map((log) => ({
       id: log.id,
-      temperature_avg: log.temperature_avg.toFixed(2).replace('.', ','),
-      temperature_min: log.temperature_min.toFixed(2).replace('.', ','),
-      temperature_max: log.temperature_max.toFixed(2).replace('.', ','),
-      humidity_avg: log.humidity_avg.toFixed(2).replace('.', ','),
-      humidity_min: log.humidity_min.toFixed(2).replace('.', ','),
-      humidity_max: log.humidity_max.toFixed(2).replace('.', ','),
-      pressure_avg: log.pressure_avg.toFixed(2).replace('.', ','),
-      pressure_min: log.pressure_min.toFixed(2).replace('.', ','),
-      pressure_max: log.pressure_max.toFixed(2).replace('.', ','),
-      precipitation_acc: log.precipitation_acc.toFixed(2).replace('.', ','),
-      solar_incidence_avg: log.solar_incidence_avg.toFixed(2).replace('.', ','),
-      solar_incidence_min: log.solar_incidence_min.toFixed(2).replace('.', ','),
-      solar_incidence_max: log.solar_incidence_max.toFixed(2).replace('.', ','),
+      temperature_avg: convertToNumberFixed(log.temperature_avg),
+      temperature_min: convertToNumberFixed(log.temperature_min),
+      temperature_max: convertToNumberFixed(log.temperature_max),
+      humidity_avg: convertToNumberFixed(log.humidity_avg),
+      humidity_min: convertToNumberFixed(log.humidity_min),
+      humidity_max: convertToNumberFixed(log.humidity_max),
+      pressure_avg: convertToNumberFixed(log.pressure_avg),
+      pressure_min: convertToNumberFixed(log.pressure_min),
+      pressure_max: convertToNumberFixed(log.pressure_max),
+      precipitation_acc: convertToNumberFixed(log.precipitation_acc),
+      solar_incidence_avg: convertToNumberFixed(log.solar_incidence_avg),
+      solar_incidence_min: convertToNumberFixed(log.solar_incidence_min),
+      solar_incidence_max: convertToNumberFixed(log.solar_incidence_max),
       wind_direction_avg: log.wind_direction_avg,
-      wind_speed_avg: log.wind_speed_avg.toFixed(2).replace('.', ','),
-      wind_speed_min: log.wind_speed_min.toFixed(2).replace('.', ','),
-      wind_speed_max: log.wind_speed_max.toFixed(2).replace('.', ','),
-      wind_gust_avg: log.wind_gust_avg.toFixed(2).replace('.', ','),
-      wind_gust_min: log.wind_gust_min.toFixed(2).replace('.', ','),
-      wind_gust_max: log.wind_gust_max.toFixed(2).replace('.', ','),
+      wind_speed_avg: convertToNumberFixed(log.wind_speed_avg),
+      wind_speed_min: convertToNumberFixed(log.wind_speed_min),
+      wind_speed_max: convertToNumberFixed(log.wind_speed_max),
+      wind_gust_avg: convertToNumberFixed(log.wind_gust_avg),
+      wind_gust_min: convertToNumberFixed(log.wind_gust_min),
+      wind_gust_max: convertToNumberFixed(log.wind_gust_max),
       date: format(log.reference_date, 'dd/MM/yyyy', { locale: ptBR }),
       hours: format(log.reference_date, 'HH:mm', { locale: ptBR }),
     }));
