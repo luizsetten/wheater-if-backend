@@ -1,11 +1,9 @@
-/* eslint-disable import/no-duplicates */
 /* eslint-disable max-len */
 import { Request, Response } from 'express';
 import { getConnection } from 'typeorm';
 
 import { parseAsync } from 'json2csv';
-import { format } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
+import { addHours, format } from 'date-fns';
 import { Record } from '../entities/Record';
 import { Log } from '../entities/Log';
 import { groupByTime } from '../utils/time';
@@ -196,8 +194,8 @@ export class LogsController {
       wind_gust_avg: convertToNumberFixed(log.wind_gust_avg),
       wind_gust_min: convertToNumberFixed(log.wind_gust_min),
       wind_gust_max: convertToNumberFixed(log.wind_gust_max),
-      date: format(log.reference_date, 'dd/MM/yyyy', { locale: ptBR }),
-      hours: format(log.reference_date, 'HH:mm', { locale: ptBR }),
+      date: format(addHours(log.reference_date, -3), 'dd/MM/yyyy'),
+      hours: format(addHours(log.reference_date, -3), 'HH:mm'),
     }));
 
     const file = await parseAsync(logsFormatted, {
