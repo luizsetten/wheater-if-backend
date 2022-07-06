@@ -187,7 +187,7 @@ export class LogsController {
       solar_incidence_avg: convertToNumberFixed(log.solar_incidence_avg),
       solar_incidence_min: convertToNumberFixed(log.solar_incidence_min),
       solar_incidence_max: convertToNumberFixed(log.solar_incidence_max),
-      wind_direction_avg: log.wind_direction_avg,
+      wind_direction_avg: convertToNumberFixed(log.wind_direction_avg),
       wind_speed_avg: convertToNumberFixed(log.wind_speed_avg),
       wind_speed_min: convertToNumberFixed(log.wind_speed_min),
       wind_speed_max: convertToNumberFixed(log.wind_speed_max),
