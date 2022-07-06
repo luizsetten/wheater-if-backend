@@ -148,5 +148,8 @@ export class UsersController {
     return response.send({
       commandResult
     });
+
+    // SELECT com data
+    // SELECT * FROM logs WHERE reference_date < '2022-06-18'::date;
   }
 }

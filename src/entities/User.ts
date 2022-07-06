@@ -27,7 +27,7 @@ class User {
   constructor() {
     if (!this.id) {
       this.id = uuidV4();
-      this.role = 'user';
+      this.role = 'disabled';
     }
   }
 }
